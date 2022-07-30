@@ -29,6 +29,16 @@ fn main() {
             .multiple_values(true),
         ),
     )
+    .subcommand(
+      Command::new("rm")
+        .about("The basic rm command improved by automatic detect if is file or dir")
+        .arg(
+          Arg::new("path")
+            .help("The path to read the files\nExample: tux rm ./another_file_to_remove.txt")
+            .action(ArgAction::Set)
+            .multiple_values(true),
+        ),
+    )
     .get_matches();
 
   match app.subcommand() {
@@ -52,6 +62,16 @@ fn main() {
 
       // Tux function for the cat command
       tux::cat::read_file(files);
+    }
+    Some(("rm", rm_matches)) => {
+      let files: Vec<&str> = rm_matches
+        .get_many::<String>("path")
+        .expect("The expected parameter is a string")
+        .map(|s| s.as_str())
+        .collect();
+
+      // Tux function for the rm command
+      tux::rm::delete_file(files)
     }
     _ => unreachable!(), // If all subcommands are defined above, anything else is unreachable
   }
