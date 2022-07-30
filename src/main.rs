@@ -11,11 +11,22 @@ fn main() {
         // The Touch command setup
         .subcommand(
             Command::new("touch")
-                .short_flag('T')
-                .long_flag("touch")
                 .about("The basic touch command create the file in the route provided")
-                .arg(Arg::new("path").help(
-                    "The path to create the file\nExample: tux touch ./a_very_important_file.txt").action(ArgAction::Set).multiple_values(true)),
+                .arg(
+                    Arg::new("path")
+                     .help("The path to create the file\nExample: tux touch ./a_very_important_file.txt")
+                     .action(ArgAction::Set)
+                     .multiple_values(true)),
+        )
+        .subcommand(
+            Command::new("cat")
+                .about("The basic cat command improved by read many files")
+                .arg(
+                    Arg::new("path")
+                      .help("The path to read the files\nExample: tux cat ./another_file_to_show.txt")
+                      .action(ArgAction::Set)
+                      .multiple_values(true)
+                )
         )
         .get_matches();
 
@@ -30,6 +41,16 @@ fn main() {
 
             // Tux function for the touch command
             tux::touch::write_file(files);
+        }
+        Some(("cat", cat_matches)) => {
+            let files: Vec<&str> = cat_matches
+                .get_many::<String>("path")
+                .expect("The expected parameter is a string")
+                .map(|s| s.as_str())
+                .collect();
+
+            // Tux function for the cat command
+            tux::cat::read_file(files);
         }
         _ => unreachable!(), // If all subcommands are defined above, anything else is unreachable
     }

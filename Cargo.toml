@@ -7,4 +7,5 @@ edition = "2021"
 
 [dependencies]
 clap = "3.2.16"
+owo-colors = "3.4.0"
 paris = { version = "1.5.13", features =["macros"]}
