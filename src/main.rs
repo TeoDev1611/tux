@@ -49,16 +49,7 @@ fn main() {
             .multiple_values(true),
         ),
     )
-    .subcommand(
-      Command::new("ls")
-        .about("The basic ls command")
-        .arg(
-          Arg::new("path")
-            .help("The path to read the files\nExample: tux which cargo")
-            .action(ArgAction::Set)
-            .multiple_values(true),
-        ),
-    )
+    .subcommand(Command::new("ls").about("The basic ls command"))
     .get_matches();
 
   match app.subcommand() {
@@ -103,6 +94,7 @@ fn main() {
       // Tux function for the rm command
       tux::which::get_path(files)
     }
+    Some(("ls", _)) => tux::ls::list_directories(),
     _ => unreachable!(), // If all subcommands are defined above, anything else is unreachable
   }
 }
