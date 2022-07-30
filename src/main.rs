@@ -49,6 +49,16 @@ fn main() {
             .multiple_values(true),
         ),
     )
+    .subcommand(
+      Command::new("ls")
+        .about("The basic ls command")
+        .arg(
+          Arg::new("path")
+            .help("The path to read the files\nExample: tux which cargo")
+            .action(ArgAction::Set)
+            .multiple_values(true),
+        ),
+    )
     .get_matches();
 
   match app.subcommand() {
